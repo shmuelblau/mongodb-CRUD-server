@@ -1,0 +1,53 @@
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: a0528075188-dev
+  name: 'mongodb'
+  annotations: {}
+spec:
+  selector:
+    matchLabels:
+      app: 'mongodb'
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: 'mongodb'
+    spec:
+      volumes:
+          - name: mypvc
+            persistentVolumeClaim:
+              claimName: mypvc
+      containers:
+        - name: mongodb-container
+          image: >-
+            shmuelblau/mongo:6.0
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          env: 
+           - name: MONGO_INITDB_ROOT_USERNAME
+             value: "shmuel"
+           - name: MONGO_INITDB_ROOT_PASSWORD
+             value: "1234"
+           - name: MONGO_INITDB_DATABASE
+             value: "test"
+           
+          volumeMounts:
+           - name: mypvc
+             mountPath: /data/db
+
+      imagePullSecrets: []
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  paused: false
+
+  
+
+
