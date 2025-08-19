@@ -28,13 +28,13 @@ spec:
            - name: HOST
              value: "mongodb-service"
            - name: DATABASE
-             value: "test"
+             value: "enemy_soldiers"
            - name: USER
              value: "shmuel"
            - name: PASSWORD
              value: "1234"
            - name: COLLECSION_NAME
-             value: "collecsion_test"
+             value: "soldier_details"
 
       imagePullSecrets: []
   strategy:

@@ -1,29 +1,18 @@
-
-
-
-
-
-
 from fastapi import FastAPI, Form, HTTPException ,Request
 from fastapi.responses import JSONResponse , HTMLResponse , RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette import status
 import uvicorn
 
+from config import *
 from DAL.Eagle_DAL import Eagle_DAL
-from Models.Person import Person
-from Models.PersonType import PersonType
+
+from services.data_loader.Models.Soldier import Soldier
 import jinja2
 
 import os
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path=".env")
-host = os.getenv("HOST")
-user = os.getenv("USER")
-password = os.getenv("PASSWORD")
-dbname = os.getenv("DATABASE")
-collecsion_name = os.getenv("COLLECSION_NAME")
 
 
 
@@ -35,12 +24,7 @@ dal = Eagle_DAL(host,user,password, dbname ,collecsion_name)
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get('/get') 
-def get():
-    
-    data = dal.Select()
-    print(data)
-    return data
+
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
@@ -54,20 +38,18 @@ def home(request: Request):
 
 
 
-
-
 @app.post("/add")
-def add_form(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),):
+def add(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),rank: str = Form(...),phone_number: int = Form(...),):
    
-    person = PersonType(id=id, first_name=first_name, last_name=last_name)
+    person = Soldier(id=id, first_name=first_name, last_name=last_name , rank=rank , phone_number=phone_number)
     dal.add(person)
     return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     
 
-@app.post('/edit' ) 
-def edit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),):
+@app.put('/edit' ) 
+def edit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),rank: str = Form(...),phone_number: int = Form(...),):
 
-    person = PersonType(id=id, first_name=first_name, last_name=last_name)
+    person = Soldier(id=id, first_name=first_name, last_name=last_name , rank=rank , phone_number=phone_number)
     
     dal.edit(person)
     
@@ -75,10 +57,10 @@ def edit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form
 
 
 
-@app.post("/delete")
+@app.delete("/delete")
 def delete_form(id: int = Form(...)):
     try:
-        person = Person(id=id)
+        person = Soldier(id=id , first_name="" ,last_name="" , rank="" , phone_number=1)
         dal.delete(person)
         return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     except Exception:
