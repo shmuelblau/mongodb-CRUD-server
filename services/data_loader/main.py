@@ -7,7 +7,7 @@ import uvicorn
 from config import *
 from DAL.Eagle_DAL import Eagle_DAL
 
-from services.data_loader.Models.Soldier import Soldier
+from Models.Soldier import Soldier
 import jinja2
 
 import os
@@ -24,12 +24,14 @@ dal = Eagle_DAL(host,user,password, dbname ,collecsion_name)
 templates = Jinja2Templates(directory="templates")
 
 
+# =================================================================
 
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
 
     data = dal.Select()
+    print(data)
     
     return templates.TemplateResponse(
         "index.html",
@@ -46,7 +48,7 @@ def add(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(
     return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     
 
-@app.put('/edit' ) 
+@app.post('/edit' ) 
 def edit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),rank: str = Form(...),phone_number: int = Form(...),):
 
     person = Soldier(id=id, first_name=first_name, last_name=last_name , rank=rank , phone_number=phone_number)
@@ -57,14 +59,42 @@ def edit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form
 
 
 
-@app.delete("/delete")
-def delete_form(id: int = Form(...)):
+@app.post("/delete")
+def delete(id: int = Form(...)):
     try:
         person = Soldier(id=id , first_name="" ,last_name="" , rank="" , phone_number=1)
         dal.delete(person)
         return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to delete record")
+
+# ===========================================================================================
+
+
+
+@app.put('/PutEdit' ) 
+def PutEdit(id: int = Form(...), first_name: str = Form(...), last_name: str = Form(...),rank: str = Form(...),phone_number: int = Form(...),):
+
+    person = Soldier(id=id, first_name=first_name, last_name=last_name , rank=rank , phone_number=phone_number)
+    
+    dal.edit(person)
+    
+    return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+
+
+
+@app.delete("/DeleteDelete")
+def DeleteDelete(id: int = Form(...)):
+    try:
+        person = Soldier(id=id , first_name="" ,last_name="" , rank="" , phone_number=1)
+        dal.delete(person)
+        return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to delete record")
+
+# ===========================================================================================
+
+
 
 
 

@@ -20,12 +20,15 @@
             <th>id</th>
             <th>first_name</th>
             <th>last_name</th>
+            <th>rank</th>
+            <th>phone_number</th>
+
            
         </tr>
 
         {% for agent in data %}
         <tr>
-            <form action="/edit" method="PUT">
+            <form action="/edit" method="POST">
                 <td><input type="text" name="id" value="{{ agent["id"] }}"></td>
                 <td><input type="text" name="first_name" value="{{ agent["first_name"] }}"></td>
                 <td><input type="text" name="last_name" value="{{ agent["last_name"] }}"></td>
@@ -36,7 +39,7 @@
                     <input type="hidden" name="id" value="{{ agent["id"] }}">
                     <input type="submit" value="Edit">
             </form>
-            <form action="/delete" method="DELETE" style="display:inline;">
+            <form action="/delete" method="POST" style="display:inline;">
                 <input type="hidden" name="id" value="{{ agent["id"] }}">
                 <input type="submit" value="Delete">
             </form>
@@ -49,6 +52,9 @@
                 <td><input type="text" name="id" placeholder="New Code Name"></td>
                 <td><input type="text" name="first_name" placeholder="New Real Name"></td>
                 <td><input type="text" name="last_name" placeholder="Location"></td>
+                <td><input type="text" name="rank" placeholder="rank"></td>
+                <td><input type="text" name="phone_number" placeholder="phone_number"></td>
+
 
                 <td><input type="submit" value="Add"></td>
             </form>
