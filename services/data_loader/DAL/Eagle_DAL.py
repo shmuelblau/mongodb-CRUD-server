@@ -5,6 +5,7 @@ from DAL.DAL import DAL
 class Eagle_DAL:
     
     def __init__(self,host,user,password, dbname ,collecsion_name):
+        
         db= DAL(host,user,password, dbname)
         self.collecsion_conn = collecsion_name
         conn = db.get_conn()

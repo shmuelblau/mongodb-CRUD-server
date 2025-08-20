@@ -4,7 +4,7 @@ class DAL:
     def __init__(self ,host,user,password, dbname) -> None:
 
          myclient = MongoClient(f"mongodb://{user}:{password}@{host}:27017/{dbname}?authSource=admin")
-         myclient.close
+        
          self.conn = myclient[dbname]
         
            

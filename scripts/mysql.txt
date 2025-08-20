@@ -1,6 +1,6 @@
 
 בניה ודחיפה לדוקרהאב
-docker build -t shmuelblau/mongo-server:13
+docker build -t shmuelblau/mongo-server:13 .
 docker push shmuelblau/mongo-server:13
 
 
