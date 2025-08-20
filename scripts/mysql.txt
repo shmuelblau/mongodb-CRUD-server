@@ -1,7 +1,7 @@
 
 בניה ודחיפה לדוקרהאב
-docker build -t shmuelblau/mongo-server:1 .
-docker push shmuelblau/mongo-server:1
+docker build -t shmuelblau/mongo-server:13 .
+docker push shmuelblau/mongo-server:13
 
 
 הרצת דפלוימנט וסרוויסים
@@ -12,26 +12,19 @@ oc apply -f server-service.yml
 
 
 הכנסת נתונים
-oc rsh deploy/mongodb
 
-mongosh "mongodb://shmuel:1234@localhost:27017/test?authSource=admin"
+oc get pods 
 
-db.createCollection("collecsion_test")
+oc cp data.json mongodb-8698c6f4d4-xjzps:/tmp
 
-db.collecsion_test.insertMany([
-  {id:1, first_name:"First1", last_name:"Last1"},
-  {id:2, first_name:"First2", last_name:"Last2"},
-  {id:3, first_name:"First3", last_name:"Last3"},
-  {id:4, first_name:"First4", last_name:"Last4"},
-  {id:5, first_name:"First5", last_name:"Last5"},
-  {id:6, first_name:"First6", last_name:"Last6"},
-  {id:7, first_name:"First7", last_name:"Last7"},
-  {id:8, first_name:"First8", last_name:"Last8"},
-  {id:9, first_name:"First9", last_name:"Last9"},
-  {id:10, first_name:"First10", last_name:"Last10"}
-])
-
-
+mongoimport \
+  --db enemy_soldiers \
+  --collection soldier_details \
+  --file /tmp/data.json \
+  --jsonArray \
+  --username shmuel \
+  --password '1234' \
+  --authenticationDatabase admin
 
 
 
